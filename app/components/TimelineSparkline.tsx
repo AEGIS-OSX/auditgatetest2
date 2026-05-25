@@ -4,13 +4,12 @@ import { motion, useReducedMotion } from "framer-motion";
 
 interface RunDatum {
   durationMs: number;
-  failed?: boolean;
 }
 
 const RUNS: RunDatum[] = [
   { durationMs: 1380 },
   { durationMs: 1510 },
-  { durationMs: 1290, failed: true },
+  { durationMs: 1290 },
   { durationMs: 1620 },
   { durationMs: 1190 },
   { durationMs: 1450 },
@@ -20,13 +19,17 @@ const RUNS: RunDatum[] = [
 const CHART_WIDTH = 280;
 const CHART_HEIGHT = 48;
 const BAR_GAP = 6;
-const BAR_COUNT = RUNS.length;
+const BAR_COUNT = RUNS.length; // 7
 const BAR_WIDTH = Math.floor((CHART_WIDTH - BAR_GAP * (BAR_COUNT - 1)) / BAR_COUNT);
 const MIN_BAR_HEIGHT = 4;
 
-function computeBars(
-  runs: RunDatum[]
-): { x: number; height: number; y: number; failed: boolean }[] {
+interface BarDatum {
+  x: number;
+  height: number;
+  y: number;
+}
+
+function computeBars(runs: RunDatum[]): BarDatum[] {
   const durations = runs.map((r) => r.durationMs);
   const maxDuration = Math.max(...durations);
   const minDuration = Math.min(...durations);
@@ -39,7 +42,7 @@ function computeBars(
     );
     const x = i * (BAR_WIDTH + BAR_GAP);
     const y = CHART_HEIGHT - barHeight;
-    return { x, height: barHeight, y, failed: run.failed ?? false };
+    return { x, height: barHeight, y };
   });
 }
 
@@ -86,21 +89,14 @@ export default function TimelineSparkline(): JSX.Element {
         >
           {bars.map((bar, i) => {
             const isLast = i === lastIndex;
-            const isFailed = bar.failed;
 
             /*
              * Color rules — all via CSS custom properties, no hardcoded hex:
-             *   failed run  → var(--agt-error)
-             *   latest run  → var(--agt-accent)   [warm teal, highlighted]
+             *   latest run  → var(--agt-accent)   [warm teal, full opacity, highlighted]
              *   other runs  → var(--agt-muted)     [at reduced opacity]
              */
-            const fillColor = isFailed
-              ? "var(--agt-error)"
-              : isLast
-              ? "var(--agt-accent)"
-              : "var(--agt-muted)";
-
-            const opacity = isFailed ? 1 : isLast ? 1 : 0.55;
+            const fillVar = isLast ? "var(--agt-accent)" : "var(--agt-muted)";
+            const opacity = isLast ? 1 : 0.55;
 
             return (
               <motion.rect
@@ -111,7 +107,7 @@ export default function TimelineSparkline(): JSX.Element {
                 height={prefersReduced ? bar.height : 0}
                 rx={2}
                 ry={2}
-                fill={fillColor}
+                fill={fillVar}
                 opacity={opacity}
                 animate={{
                   y: bar.y,
@@ -125,8 +121,8 @@ export default function TimelineSparkline(): JSX.Element {
                 aria-label={`Run ${
                   i + 1
                 }: ${RUNS[i].durationMs}ms${
-                  isFailed ? " (failed)" : ""
-                }${isLast ? " (latest)" : ""}`}
+                  isLast ? " (latest)" : ""
+                }`}
               />
             );
           })}
@@ -174,13 +170,13 @@ export default function TimelineSparkline(): JSX.Element {
               lineHeight: "var(--agt-type-small-line)",
             }}
           >
-            pass
+            latest
           </span>
         </span>
         <span className="flex items-center gap-[6px]">
           <span
             className="inline-block w-[8px] h-[8px] rounded-[2px]"
-            style={{ backgroundColor: "var(--agt-error)" }}
+            style={{ backgroundColor: "var(--agt-muted)", opacity: 0.55 }}
           />
           <span
             className="font-[family-name:var(--font-ui)]"
@@ -190,7 +186,7 @@ export default function TimelineSparkline(): JSX.Element {
               lineHeight: "var(--agt-type-small-line)",
             }}
           >
-            fail
+            prior
           </span>
         </span>
       </div>
