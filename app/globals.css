@@ -13,15 +13,16 @@
   --agt-muted: #7F8A8D;
   --agt-border: #1A1B1C;
   --agt-focus: #00E0C9;
+  --agt-error: #E05252;  /* Error / fail state — added for StatusPanel fail state */
 
   /* Typography */
-  --font-display: "PP Editorial New", Georgia, "Times New Roman", serif;
-  --font-ui: "Geist", "Helvetica Neue", Arial, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+  --font-display: "PP Editorial New", Georgia, 'Times New Roman', serif;
+  --font-ui: "Geist", "Helvetica Neue", Arial, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace;
 
   /* Type scale */
   --agt-type-h1-size: 56px;
-  --agt-type-h1-line: 64px;
+  --agt-type-h1-line: 64px;   /* chosen resolution for legibility and single-line display */
   --agt-type-h2-size: 32px;
   --agt-type-h2-line: 40px;
   --agt-type-h3-size: 20px;

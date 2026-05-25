@@ -9,24 +9,40 @@ interface StatusPanelProps {
   statusCopy?: string;
 }
 
-const STATUS_CONFIG: Record<StatusValue, { label: string; dotClass: string; badgeClass: string; badgeTextClass: string }> = {
+/**
+ * STATUS_CONFIG — all colors reference CSS custom properties.
+ * No hardcoded hex literals or Tailwind color classes.
+ */
+const STATUS_CONFIG: Record<
+  StatusValue,
+  {
+    label: string;
+    dotVar: string;
+    badgeBgVar: string;
+    badgeBorderVar: string;
+    badgeTextVar: string;
+  }
+> = {
   ok: {
     label: "OK",
-    dotClass: "bg-[var(--agt-success)]",
-    badgeClass: "bg-[var(--agt-success)]/10 border-[var(--agt-success)]/30",
-    badgeTextClass: "text-[var(--agt-success)]",
+    dotVar: "var(--agt-accent)",
+    badgeBgVar: "color-mix(in srgb, var(--agt-accent) 12%, transparent)",
+    badgeBorderVar: "color-mix(in srgb, var(--agt-accent) 30%, transparent)",
+    badgeTextVar: "var(--agt-accent)",
   },
   fail: {
     label: "FAIL",
-    dotClass: "bg-red-500",
-    badgeClass: "bg-red-500/10 border-red-500/30",
-    badgeTextClass: "text-red-400",
+    dotVar: "var(--agt-error)",
+    badgeBgVar: "color-mix(in srgb, var(--agt-error) 12%, transparent)",
+    badgeBorderVar: "color-mix(in srgb, var(--agt-error) 30%, transparent)",
+    badgeTextVar: "var(--agt-error)",
   },
   unknown: {
     label: "UNKNOWN",
-    dotClass: "bg-[var(--agt-muted)]",
-    badgeClass: "bg-[var(--agt-muted)]/10 border-[var(--agt-muted)]/30",
-    badgeTextClass: "text-[var(--agt-muted)]",
+    dotVar: "var(--agt-muted)",
+    badgeBgVar: "color-mix(in srgb, var(--agt-muted) 12%, transparent)",
+    badgeBorderVar: "color-mix(in srgb, var(--agt-muted) 30%, transparent)",
+    badgeTextVar: "var(--agt-muted)",
   },
 };
 
@@ -41,47 +57,101 @@ export function StatusPanel({
     <section
       id="status-panel"
       aria-label="Pipeline status"
-      className="w-full border border-[var(--agt-border)] bg-[var(--agt-surface)] rounded-[var(--radius-md)] p-6"
+      style={{
+        width: "100%",
+        border: "1px solid var(--agt-border)",
+        backgroundColor: "var(--agt-surface)",
+        borderRadius: "var(--radius-md)",
+        padding: "var(--space-3)",
+      }}
     >
       {/* Section label */}
       <p
-        className="font-[family-name:var(--font-mono)] text-[length:var(--agt-type-small-size)] leading-[var(--agt-type-small-line)] text-[var(--agt-warm-gray)] uppercase tracking-widest mb-4"
+        style={{
+          fontFamily: "var(--font-mono)",
+          fontSize: "var(--agt-type-small-size)",
+          lineHeight: "var(--agt-type-small-line)",
+          color: "var(--agt-warm-gray)",
+          textTransform: "uppercase",
+          letterSpacing: "0.1em",
+          marginBottom: "var(--space-2)",
+        }}
         aria-hidden="true"
       >
         Pipeline Status
       </p>
 
-      {/* Badge + copy row */}
+      {/* Badge + copy row — aria-live region */}
       <div
         role="status"
         aria-live="polite"
         aria-atomic="true"
-        className="flex flex-col sm:flex-row sm:items-center gap-3"
+        style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-1)" }}
       >
         {/* Status badge */}
         <motion.div
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-sm)] border font-[family-name:var(--font-mono)] text-[length:var(--agt-type-small-size)] leading-[var(--agt-type-small-line)] font-medium tracking-wider ${config.badgeClass} ${config.badgeTextClass}`}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "var(--space-1)",
+            paddingInline: "var(--space-1)",
+            paddingBlock: "4px",
+            borderRadius: "var(--radius-sm)",
+            border: "1px solid",
+            borderColor: config.badgeBorderVar,
+            backgroundColor: config.badgeBgVar,
+            fontFamily: "var(--font-mono)",
+            fontSize: "var(--agt-type-small-size)",
+            lineHeight: "var(--agt-type-small-line)",
+            fontWeight: 500,
+            letterSpacing: "0.08em",
+            color: config.badgeTextVar,
+          }}
         >
           {/* Pulse dot */}
-          <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
+          <span
+            style={{ position: "relative", display: "flex", width: "8px", height: "8px", flexShrink: 0 }}
+            aria-hidden="true"
+          >
             {status === "ok" && (
               <span
-                className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-60 ${config.dotClass}`}
+                className="animate-ping"
+                style={{
+                  position: "absolute",
+                  display: "inline-flex",
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "9999px",
+                  opacity: 0.6,
+                  backgroundColor: config.dotVar,
+                }}
               />
             )}
             <span
-              className={`relative inline-flex rounded-full h-2 w-2 ${config.dotClass}`}
+              style={{
+                position: "relative",
+                display: "inline-flex",
+                borderRadius: "9999px",
+                width: "8px",
+                height: "8px",
+                backgroundColor: config.dotVar,
+              }}
             />
           </span>
           {config.label}
         </motion.div>
 
-        {/* Divider (desktop only) */}
+        {/* Divider */}
         <span
-          className="hidden sm:block w-px h-4 bg-[var(--agt-border)]"
+          style={{
+            display: "block",
+            width: "1px",
+            height: "16px",
+            backgroundColor: "var(--agt-border)",
+          }}
           aria-hidden="true"
         />
 
@@ -90,7 +160,14 @@ export function StatusPanel({
           initial={{ opacity: 0, x: -4 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.2, ease: "easeOut", delay: 0.05 }}
-          className="font-[family-name:var(--font-ui)] text-[length:var(--agt-type-body-size)] leading-[var(--agt-type-body-line)] font-medium text-[var(--agt-text)]"
+          style={{
+            fontFamily: "var(--font-ui)",
+            fontSize: "var(--agt-type-body-size)",
+            lineHeight: "var(--agt-type-body-line)",
+            fontWeight: 500,
+            color: "var(--agt-text)",
+            margin: 0,
+          }}
         >
           {statusLabel}
         </motion.p>
@@ -101,22 +178,37 @@ export function StatusPanel({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.25, ease: "easeOut", delay: 0.1 }}
-        className="mt-3 font-[family-name:var(--font-ui)] text-[length:var(--agt-type-small-size)] leading-[var(--agt-type-small-line)] text-[var(--agt-warm-gray)]"
+        style={{
+          marginTop: "var(--space-1)",
+          fontFamily: "var(--font-ui)",
+          fontSize: "var(--agt-type-small-size)",
+          lineHeight: "var(--agt-type-small-line)",
+          color: "var(--agt-warm-gray)",
+        }}
       >
         {statusCopy}
       </motion.p>
 
       {/* Teal accent rule */}
       <div
-        className="mt-5 h-px w-full bg-[var(--agt-border)]"
+        style={{
+          marginTop: "var(--space-2)",
+          height: "1px",
+          width: "100%",
+          backgroundColor: "var(--agt-border)",
+        }}
         aria-hidden="true"
       >
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.35, ease: "easeOut", delay: 0.15 }}
-          style={{ transformOrigin: "left" }}
-          className="h-px w-full bg-[var(--agt-accent)]"
+          style={{
+            transformOrigin: "left",
+            height: "1px",
+            width: "100%",
+            backgroundColor: "var(--agt-accent)",
+          }}
         />
       </div>
     </section>
