@@ -3,17 +3,16 @@
 @tailwind utilities;
 
 :root {
-  /* Color palette */
-  --color-bg: #0B0C0D;
-  --color-surface: #111214;
-  --color-text: #FFFFFF;
-  --color-primary: #00B3A6;
-  --color-accent: #00B3A6;
-  --color-warm-gray: #BFC6C9;
-  --color-success: #A7D84B;
-  --color-muted: #7F8A8D;
-  --color-border: #1A1B1C;
-  --color-focus: #00E0C9;
+  /* ── AuditGateTest2 design tokens (canonical --agt-* names) ── */
+  --agt-bg: #0B0C0D;
+  --agt-surface: #111214;
+  --agt-text: #FFFFFF;
+  --agt-accent: #00B3A6;
+  --agt-warm-gray: #BFC6C9;
+  --agt-success: #A7D84B;
+  --agt-muted: #7F8A8D;
+  --agt-border: #1A1B1C;
+  --agt-focus: #00E0C9;
 
   /* Typography */
   --font-display: "PP Editorial New", Georgia, "Times New Roman", serif;
@@ -21,16 +20,16 @@
   --font-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
 
   /* Type scale */
-  --type-h1-size: 56px;
-  --type-h1-line: 64px;
-  --type-h2-size: 32px;
-  --type-h2-line: 40px;
-  --type-h3-size: 20px;
-  --type-h3-line: 28px;
-  --type-body-size: 16px;
-  --type-body-line: 24px;
-  --type-small-size: 13px;
-  --type-small-line: 20px;
+  --agt-type-h1-size: 56px;
+  --agt-type-h1-line: 64px;
+  --agt-type-h2-size: 32px;
+  --agt-type-h2-line: 40px;
+  --agt-type-h3-size: 20px;
+  --agt-type-h3-line: 28px;
+  --agt-type-body-size: 16px;
+  --agt-type-body-line: 24px;
+  --agt-type-small-size: 13px;
+  --agt-type-small-line: 20px;
 
   /* Spacing (8pt scale) */
   --space-1: 8px;
@@ -47,23 +46,45 @@
   --radius-sm: 2px;
   --radius-md: 4px;
   --radius-lg: 8px;
+
+  /* Legacy aliases (kept for backward compat) */
+  --color-bg: var(--agt-bg);
+  --color-surface: var(--agt-surface);
+  --color-text: var(--agt-text);
+  --color-primary: var(--agt-accent);
+  --color-accent: var(--agt-accent);
+  --color-warm-gray: var(--agt-warm-gray);
+  --color-success: var(--agt-success);
+  --color-muted: var(--agt-muted);
+  --color-border: var(--agt-border);
+  --color-focus: var(--agt-focus);
+  --type-h1-size: var(--agt-type-h1-size);
+  --type-h1-line: var(--agt-type-h1-line);
+  --type-h2-size: var(--agt-type-h2-size);
+  --type-h2-line: var(--agt-type-h2-line);
+  --type-h3-size: var(--agt-type-h3-size);
+  --type-h3-line: var(--agt-type-h3-line);
+  --type-body-size: var(--agt-type-body-size);
+  --type-body-line: var(--agt-type-body-line);
+  --type-small-size: var(--agt-type-small-size);
+  --type-small-line: var(--agt-type-small-line);
 }
 
 @layer base {
   html,
   body {
-    background-color: var(--color-bg);
-    color: var(--color-text);
+    background-color: var(--agt-bg);
+    color: var(--agt-text);
     font-family: var(--font-ui);
-    font-size: var(--type-body-size);
-    line-height: var(--type-body-line);
+    font-size: var(--agt-type-body-size);
+    line-height: var(--agt-type-body-line);
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   *:focus-visible {
-    outline: 2px solid var(--color-focus);
+    outline: 2px solid var(--agt-focus);
     outline-offset: 2px;
   }
 
