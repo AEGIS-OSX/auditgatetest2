@@ -48,6 +48,10 @@
   --radius-md: 4px;
   --radius-lg: 8px;
 
+  /* AGT spacing aliases used by utility classes */
+  --agt-space-lg: 24px;
+  --agt-content-width: clamp(320px, 88vw, 960px);
+
   /* Legacy aliases (kept for backward compat) */
   --color-bg: var(--agt-bg);
   --color-surface: var(--agt-surface);
@@ -97,5 +101,84 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+  }
+}
+
+/* ── AuditGateTest2 base overrides ── */
+html,
+body {
+  overflow-x: clip; /* preserves position:sticky; do NOT use overflow-x:hidden */
+  background-color: var(--agt-bg);
+  color: var(--agt-text);
+  font-family: var(--font-ui);
+  font-size: var(--agt-type-body-size);
+  line-height: var(--agt-type-body-line);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Visually hidden — accessible but not rendered */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Instrument panel container */
+.agt-container {
+  width: var(--agt-content-width); /* clamp(320px, 88vw, 960px) */
+  margin-inline: auto;
+  padding-inline: var(--agt-space-lg); /* 24px */
+}
+
+/* Mono readout text */
+.agt-mono {
+  font-family: var(--font-mono);
+  font-size: var(--agt-type-small-size); /* 13px */
+  line-height: var(--agt-type-small-line); /* 20px */
+  font-weight: 400;
+  color: var(--agt-text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+/* Warm gray label */
+.agt-label {
+  font-family: var(--font-ui);
+  font-size: var(--agt-type-small-size); /* 13px */
+  line-height: var(--agt-type-small-line); /* 20px */
+  font-weight: 400;
+  color: var(--agt-warm-gray);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* Panel surface */
+.agt-panel {
+  background-color: var(--agt-surface);
+  border: 1px solid var(--agt-border);
+  border-radius: 4px;
+}
+
+/* Focus ring — instant, no fade */
+:focus-visible {
+  outline: 2px solid var(--agt-focus);
+  outline-offset: 2px;
+}
+
+/* Reduced motion fallback */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
