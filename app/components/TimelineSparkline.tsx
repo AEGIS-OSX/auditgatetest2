@@ -24,7 +24,9 @@ const BAR_COUNT = RUNS.length;
 const BAR_WIDTH = Math.floor((CHART_WIDTH - BAR_GAP * (BAR_COUNT - 1)) / BAR_COUNT);
 const MIN_BAR_HEIGHT = 4;
 
-function computeBars(runs: RunDatum[]): { x: number; height: number; y: number; failed: boolean }[] {
+function computeBars(
+  runs: RunDatum[]
+): { x: number; height: number; y: number; failed: boolean }[] {
   const durations = runs.map((r) => r.durationMs);
   const maxDuration = Math.max(...durations);
   const minDuration = Math.min(...durations);
@@ -32,7 +34,9 @@ function computeBars(runs: RunDatum[]): { x: number; height: number; y: number; 
 
   return runs.map((run, i) => {
     const normalised = (run.durationMs - minDuration) / range;
-    const barHeight = Math.round(MIN_BAR_HEIGHT + normalised * (CHART_HEIGHT - MIN_BAR_HEIGHT));
+    const barHeight = Math.round(
+      MIN_BAR_HEIGHT + normalised * (CHART_HEIGHT - MIN_BAR_HEIGHT)
+    );
     const x = i * (BAR_WIDTH + BAR_GAP);
     const y = CHART_HEIGHT - barHeight;
     return { x, height: barHeight, y, failed: run.failed ?? false };
@@ -49,9 +53,11 @@ export default function TimelineSparkline(): JSX.Element {
       aria-label="Timeline: recent run durations"
       className="flex flex-col gap-[8px] w-full"
     >
+      {/* Verbatim copy label per spec */}
       <p
-        className="text-[var(--agt-warm-gray)] font-[family-name:var(--font-ui)] font-medium"
+        className="font-[family-name:var(--font-ui)] font-medium"
         style={{
+          color: "var(--agt-warm-gray)",
           fontSize: "var(--agt-type-small-size)",
           lineHeight: "var(--agt-type-small-line)",
         }}
@@ -60,7 +66,13 @@ export default function TimelineSparkline(): JSX.Element {
       </p>
 
       <div
-        className="relative w-full overflow-hidden rounded-[var(--radius-md)] border border-[var(--agt-border)] bg-[var(--agt-surface)] px-[16px] py-[16px]"
+        className="relative w-full overflow-hidden"
+        style={{
+          borderRadius: "var(--radius-md)",
+          border: "1px solid var(--agt-border)",
+          backgroundColor: "var(--agt-surface)",
+          padding: "var(--space-2)",
+        }}
         role="img"
         aria-label="Bar chart showing last 7 pipeline run durations in milliseconds"
       >
@@ -76,8 +88,14 @@ export default function TimelineSparkline(): JSX.Element {
             const isLast = i === lastIndex;
             const isFailed = bar.failed;
 
+            /*
+             * Color rules — all via CSS custom properties, no hardcoded hex:
+             *   failed run  → var(--agt-error)
+             *   latest run  → var(--agt-accent)   [warm teal, highlighted]
+             *   other runs  → var(--agt-muted)     [at reduced opacity]
+             */
             const fillColor = isFailed
-              ? "var(--agt-error, #E05252)"
+              ? "var(--agt-error)"
               : isLast
               ? "var(--agt-accent)"
               : "var(--agt-muted)";
@@ -104,7 +122,9 @@ export default function TimelineSparkline(): JSX.Element {
                   delay: prefersReduced ? 0 : i * 0.04,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                aria-label={`Run ${i + 1}: ${RUNS[i].durationMs}ms${
+                aria-label={`Run ${
+                  i + 1
+                }: ${RUNS[i].durationMs}ms${
                   isFailed ? " (failed)" : ""
                 }${isLast ? " (latest)" : ""}`}
               />
@@ -117,8 +137,9 @@ export default function TimelineSparkline(): JSX.Element {
           aria-hidden="true"
         >
           <span
-            className="font-[family-name:var(--font-mono)] text-[var(--agt-muted)]"
+            className="font-[family-name:var(--font-mono)]"
             style={{
+              color: "var(--agt-muted)",
               fontSize: "var(--agt-type-small-size)",
               lineHeight: "var(--agt-type-small-line)",
             }}
@@ -126,8 +147,9 @@ export default function TimelineSparkline(): JSX.Element {
             run 1
           </span>
           <span
-            className="font-[family-name:var(--font-mono)] text-[var(--agt-accent)]"
+            className="font-[family-name:var(--font-mono)]"
             style={{
+              color: "var(--agt-accent)",
               fontSize: "var(--agt-type-small-size)",
               lineHeight: "var(--agt-type-small-line)",
             }}
@@ -137,14 +159,17 @@ export default function TimelineSparkline(): JSX.Element {
         </div>
       </div>
 
+      {/* Legend */}
       <div className="flex items-center gap-[16px]" aria-hidden="true">
         <span className="flex items-center gap-[6px]">
           <span
-            className="inline-block w-[8px] h-[8px] rounded-[2px] bg-[var(--agt-accent)]"
+            className="inline-block w-[8px] h-[8px] rounded-[2px]"
+            style={{ backgroundColor: "var(--agt-accent)" }}
           />
           <span
-            className="font-[family-name:var(--font-ui)] text-[var(--agt-warm-gray)]"
+            className="font-[family-name:var(--font-ui)]"
             style={{
+              color: "var(--agt-warm-gray)",
               fontSize: "var(--agt-type-small-size)",
               lineHeight: "var(--agt-type-small-line)",
             }}
@@ -155,11 +180,12 @@ export default function TimelineSparkline(): JSX.Element {
         <span className="flex items-center gap-[6px]">
           <span
             className="inline-block w-[8px] h-[8px] rounded-[2px]"
-            style={{ backgroundColor: "var(--agt-error, #E05252)" }}
+            style={{ backgroundColor: "var(--agt-error)" }}
           />
           <span
-            className="font-[family-name:var(--font-ui)] text-[var(--agt-warm-gray)]"
+            className="font-[family-name:var(--font-ui)]"
             style={{
+              color: "var(--agt-warm-gray)",
               fontSize: "var(--agt-type-small-size)",
               lineHeight: "var(--agt-type-small-line)",
             }}
