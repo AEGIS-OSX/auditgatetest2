@@ -1,6 +1,5 @@
 "use client";
 import { motion } from "framer-motion";
-import { ProjectImage } from "./ProjectImage";
 
 // prefers-reduced-motion evaluated once at module load (client only)
 const REDUCE_MOTION =
@@ -154,20 +153,6 @@ export function PageHeader() {
                   </div>
                 ))}
               </motion.dl>
-
-              {/* Hero screenshot thumbnail — LCP image */}
-              <motion.div
-                style={{ marginTop: "var(--agt-space-lg)", width: "100%" }}
-                variants={fadeUp}
-                initial="hidden"
-                animate="visible"
-                custom={0.24}
-              >
-                <ProjectImage
-                  id="hero"
-                  className="w-full rounded-sm border border-[var(--agt-border)] object-cover"
-                />
-              </motion.div>
             </div>
           </div>
         </div>
