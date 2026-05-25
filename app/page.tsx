@@ -4,6 +4,7 @@ import { StatusPanel } from "./components/StatusPanel";
 import { NumericReadouts } from "./components/NumericReadouts";
 import { TimelineSparkline } from "./components/TimelineSparkline";
 import { ControlsRow } from "./components/ControlsRow";
+import { ProjectImage } from "./components/ProjectImage";
 
 export default function Home() {
   return (
@@ -13,10 +14,10 @@ export default function Home() {
     >
       {/* Visually-hidden accessibility description */}
       <p className="sr-only">
-        Pipeline calibration — single-route static render.
+        Pipeline calibration: single-route static render.
       </p>
 
-      {/* PageHeader — dramatic H1, asymmetric two-column layout */}
+      {/* PageHeader — dramatic H1, asymmetric two-column layout, hero image */}
       <PageHeader />
 
       {/* Instrument panel body — all sections share a consistent container */}
@@ -36,14 +37,46 @@ export default function Home() {
           />
         </section>
 
-        {/* NumericReadouts — 4-column dense grid of labeled mono metrics */}
+        {/* Social proof visual — optional supplementary image */}
+        <section className="mb-8" aria-label="Pipeline social proof">
+          <ProjectImage
+            id="social_proof"
+            className="w-full rounded-sm border border-[var(--agt-border)] object-cover"
+          />
+        </section>
+
+        {/* NumericReadouts — responsive grid of labeled mono metrics */}
         <section className="mb-8">
           <NumericReadouts />
         </section>
 
-        {/* TimelineSparkline — SVG bar chart of last 7 run durations */}
+        {/* TimelineSparkline — fluid SVG bar chart of last 7 run durations */}
         <section className="mb-8">
           <TimelineSparkline />
+        </section>
+
+        {/* Pipeline artifact visuals — feature images from creative deliverables */}
+        <section className="mb-8" aria-label="Pipeline artifact visuals">
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: "var(--space-2)",
+            }}
+          >
+            <ProjectImage
+              id="feature_1"
+              className="w-full rounded-sm border border-[var(--agt-border)] object-cover"
+            />
+            <ProjectImage
+              id="feature_2"
+              className="w-full rounded-sm border border-[var(--agt-border)] object-cover"
+            />
+            <ProjectImage
+              id="feature_3"
+              className="w-full rounded-sm border border-[var(--agt-border)] object-cover"
+            />
+          </div>
         </section>
 
         {/* ControlsRow — View status anchor + disabled Re-run button */}
@@ -65,7 +98,7 @@ export default function Home() {
               lineHeight: "var(--agt-type-small-line)",
             }}
           >
-            AEGIS Gate Test — Build gate verification. For developer use only.
+            AEGIS Gate Test: Build gate verification. For developer use only.
           </p>
           <p
             className="font-[family-name:var(--font-mono)] text-[var(--agt-muted)]"
