@@ -53,30 +53,36 @@ export function NumericReadouts() {
     <section
       id="numeric-readouts"
       aria-label="Build metrics"
-      className="w-full"
+      style={{ width: "100%" }}
     >
       {/* Section label */}
       <p
-        className="font-[family-name:var(--font-mono)] uppercase tracking-widest mb-[var(--space-2)]"
         style={{
+          fontFamily: "var(--font-mono)",
           fontSize: "var(--agt-type-small-size)",
           lineHeight: "var(--agt-type-small-line)",
           color: "var(--agt-warm-gray)",
+          textTransform: "uppercase",
           letterSpacing: "0.1em",
+          marginBottom: "var(--space-2)",
         }}
         aria-hidden="true"
       >
         Build Metrics
       </p>
 
-      {/* 4-column grid */}
+      {/* 4-column grid — always 4 columns, no responsive collapse */}
       <motion.dl
-        className="grid grid-cols-2 sm:grid-cols-4 gap-px"
         style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: "1px",
           backgroundColor: "var(--agt-border)",
           borderRadius: "var(--radius-md)",
           overflow: "hidden",
           border: "1px solid var(--agt-border)",
+          margin: 0,
+          padding: 0,
         }}
         variants={CONTAINER_VARIANTS}
         initial="hidden"
@@ -86,33 +92,39 @@ export function NumericReadouts() {
           <motion.div
             key={item.label}
             variants={ITEM_VARIANTS}
-            className="flex flex-col gap-[var(--space-1)] p-[var(--space-2)]"
             style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "var(--space-1)",
+              padding: "var(--space-2)",
               backgroundColor: "var(--agt-surface)",
             }}
           >
             {/* Label */}
             <dt
-              className="font-[family-name:var(--font-mono)] uppercase tracking-widest"
               style={{
+                fontFamily: "var(--font-mono)",
                 fontSize: "var(--agt-type-small-size)",
                 lineHeight: "var(--agt-type-small-line)",
                 color: "var(--agt-warm-gray)",
+                textTransform: "uppercase",
                 letterSpacing: "0.08em",
+                margin: 0,
               }}
             >
               {item.label}
             </dt>
 
-            {/* Value */}
+            {/* Value — mono at small scale (13px / 20px) */}
             <dd
-              className="font-[family-name:var(--font-mono)] m-0"
               style={{
-                fontSize: "var(--agt-type-h3-size)",
-                lineHeight: "var(--agt-type-h3-line)",
+                fontFamily: "var(--font-mono)",
+                fontSize: "var(--agt-type-small-size)",
+                lineHeight: "var(--agt-type-small-line)",
                 color: "var(--agt-text)",
-                fontWeight: 500,
+                fontWeight: 400,
                 letterSpacing: "-0.01em",
+                margin: 0,
               }}
               aria-label={item.ariaLabel}
             >
