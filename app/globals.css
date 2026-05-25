@@ -182,3 +182,263 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── APPENDED BLOCK — instrument page utilities ── */
+
+/* Font-face declarations (font-display: swap for LCP compliance) */
+@font-face {
+  font-family: "PP Editorial New";
+  src: local("PP Editorial New");
+  font-weight: 500 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: local("Geist");
+  font-weight: 400 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Berkeley Mono";
+  src: local("Berkeley Mono");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* H1 — display type, exact spec: 56px / 64px, weight 600 */
+.agt-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw + 1rem, var(--agt-type-h1-size));
+  line-height: var(--agt-type-h1-line);
+  font-weight: 600;
+  color: var(--agt-text);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* H2 — section headings */
+.agt-h2 {
+  font-family: var(--font-ui);
+  font-size: var(--agt-type-h2-size);
+  line-height: var(--agt-type-h2-line);
+  font-weight: 500;
+  color: var(--agt-text);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+/* H3 — panel headings */
+.agt-h3 {
+  font-family: var(--font-ui);
+  font-size: var(--agt-type-h3-size);
+  line-height: var(--agt-type-h3-line);
+  font-weight: 500;
+  color: var(--agt-text);
+  margin: 0;
+}
+
+/* Status badge — base */
+.agt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: var(--agt-type-small-size);
+  line-height: var(--agt-type-small-line);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid currentColor;
+}
+
+/* Status badge — OK / passing */
+.agt-badge-ok {
+  color: var(--agt-success);
+  border-color: var(--agt-success);
+  background-color: color-mix(in srgb, var(--agt-success) 8%, transparent);
+}
+
+/* Status badge — fail */
+.agt-badge-fail {
+  color: var(--agt-error);
+  border-color: var(--agt-error);
+  background-color: color-mix(in srgb, var(--agt-error) 8%, transparent);
+}
+
+/* Status badge — unknown */
+.agt-badge-unknown {
+  color: var(--agt-muted);
+  border-color: var(--agt-muted);
+  background-color: color-mix(in srgb, var(--agt-muted) 8%, transparent);
+}
+
+/* Status dot — inline indicator */
+.agt-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.agt-dot-ok   { background-color: var(--agt-success); }
+.agt-dot-fail { background-color: var(--agt-error); }
+.agt-dot-unknown { background-color: var(--agt-muted); }
+
+/* Readout cell — label + value pair */
+.agt-readout {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.agt-readout__label {
+  font-family: var(--font-ui);
+  font-size: var(--agt-type-small-size);
+  line-height: var(--agt-type-small-line);
+  font-weight: 400;
+  color: var(--agt-warm-gray);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.agt-readout__value {
+  font-family: var(--font-mono);
+  font-size: var(--agt-type-small-size);
+  line-height: var(--agt-type-small-line);
+  font-weight: 400;
+  color: var(--agt-text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+/* Divider — 1px horizontal rule */
+.agt-divider {
+  border: none;
+  border-top: 1px solid var(--agt-border);
+  margin: 0;
+}
+
+/* Accent text — warm teal interactive highlight */
+.agt-accent-text {
+  color: var(--agt-accent);
+}
+
+/* Muted text — disabled / secondary */
+.agt-muted-text {
+  color: var(--agt-muted);
+}
+
+/* Button — base instrument style */
+.agt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-ui);
+  font-size: var(--agt-type-small-size);
+  line-height: var(--agt-type-small-line);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--agt-border);
+  background-color: transparent;
+  color: var(--agt-text);
+  cursor: pointer;
+  transition: border-color 150ms ease-out, color 150ms ease-out, background-color 150ms ease-out;
+  text-decoration: none;
+}
+
+.agt-btn:hover {
+  border-color: var(--agt-accent);
+  color: var(--agt-accent);
+}
+
+.agt-btn:focus-visible {
+  outline: 2px solid var(--agt-focus);
+  outline-offset: 2px;
+}
+
+.agt-btn:disabled,
+.agt-btn[aria-disabled="true"] {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Button — primary accent variant */
+.agt-btn-primary {
+  background-color: var(--agt-accent);
+  border-color: var(--agt-accent);
+  color: var(--agt-bg);
+}
+
+.agt-btn-primary:hover {
+  background-color: var(--agt-focus);
+  border-color: var(--agt-focus);
+  color: var(--agt-bg);
+}
+
+/* Timeline bar — sparkline segment */
+.agt-timeline-bar {
+  fill: var(--agt-accent);
+  opacity: 0.7;
+  transition: opacity 150ms ease-out;
+}
+
+.agt-timeline-bar:hover {
+  opacity: 1;
+}
+
+.agt-timeline-bar--fail {
+  fill: var(--agt-error);
+}
+
+/* Skeleton loader — shimmer for async data areas */
+@keyframes agt-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.agt-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--agt-surface) 25%,
+    color-mix(in srgb, var(--agt-border) 60%, var(--agt-surface)) 50%,
+    var(--agt-surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: agt-shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .agt-skeleton {
+    animation: none;
+    background: var(--agt-surface);
+  }
+}
+
+/* Fade-in entry — used by Framer Motion fallback */
+@keyframes agt-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.agt-fade-in {
+  animation: agt-fade-in 240ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .agt-fade-in {
+    animation: none;
+  }
+}
