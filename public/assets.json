@@ -1,31 +1,31 @@
 {
   "hero": {
-    "url": "",
-    "alt": "",
+    "url": "https://zkvkbpxrxnfynqqeytke.supabase.co/storage/v1/object/public/marketing-assets/auditgatetest2/cleo/1779731975247-hero.png",
+    "alt": "Hero instrument plate showing the H1 'AEGIS Gate Test' engraved on a matte panel with warm teal edge lighting and precise vector readouts; reflects the page's dark-first, clinical instrument aesthetic",
     "width": 1920,
     "height": 1080
   },
   "feature_1": {
-    "url": "",
-    "alt": "",
+    "url": "https://zkvkbpxrxnfynqqeytke.supabase.co/storage/v1/object/public/marketing-assets/auditgatetest2/cleo/1779732015456-feature_1.png",
+    "alt": "Overhead instrument grid with three micro-panels rendered as vector UI elements; warm teal accents and Berkeley Mono status lines make it read as a developer instrument rack.",
     "width": 800,
     "height": 600
   },
   "feature_2": {
-    "url": "",
-    "alt": "",
+    "url": "https://zkvkbpxrxnfynqqeytke.supabase.co/storage/v1/object/public/marketing-assets/auditgatetest2/cleo/1779732007716-feature_2.png",
+    "alt": "Tight close-up of numeric readouts and inline code status lines in Berkeley Mono; warm teal highlights and a sparse soft-lime status dot emphasize precision metrics.",
     "width": 800,
     "height": 600
   },
   "feature_3": {
-    "url": "",
-    "alt": "",
+    "url": "https://zkvkbpxrxnfynqqeytke.supabase.co/storage/v1/object/public/marketing-assets/auditgatetest2/cleo/1779732006399-feature_3.png",
+    "alt": "Isometric vector schematic of the pipeline with connectors in warm teal and labeled nodes in warm gray; left-aligned composition provides layout breathing room for the page.",
     "width": 800,
     "height": 600
   },
   "social_proof": {
-    "url": "",
-    "alt": "",
+    "url": "https://zkvkbpxrxnfynqqeytke.supabase.co/storage/v1/object/public/marketing-assets/auditgatetest2/cleo/1779731991065-social_proof.png",
+    "alt": "Minimal testimonial accent card silhouette against a matte panel texture; warm teal microcopy highlight and quiet panel seams maintain the instrument aesthetic without people or photography.",
     "width": 1200,
     "height": 800
   }
