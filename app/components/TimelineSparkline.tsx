@@ -46,7 +46,7 @@ function computeBars(runs: RunDatum[]): BarDatum[] {
   });
 }
 
-export default function TimelineSparkline(): JSX.Element {
+export function TimelineSparkline(): JSX.Element {
   const prefersReduced = useReducedMotion();
   const bars = computeBars(RUNS);
   const lastIndex = RUNS.length - 1;
@@ -54,23 +54,27 @@ export default function TimelineSparkline(): JSX.Element {
   return (
     <section
       aria-label="Timeline: recent run durations"
-      className="flex flex-col gap-[8px] w-full"
+      style={{ display: "flex", flexDirection: "column", gap: "var(--space-1)", width: "100%" }}
     >
       {/* Verbatim copy label per spec */}
       <p
-        className="font-[family-name:var(--font-ui)] font-medium"
         style={{
+          fontFamily: "var(--font-ui)",
+          fontWeight: 500,
           color: "var(--agt-warm-gray)",
           fontSize: "var(--agt-type-small-size)",
           lineHeight: "var(--agt-type-small-line)",
+          margin: 0,
         }}
       >
         Recent run durations (last 7 runs)
       </p>
 
       <div
-        className="relative w-full overflow-hidden"
         style={{
+          position: "relative",
+          width: "100%",
+          overflow: "hidden",
           borderRadius: "var(--radius-md)",
           border: "1px solid var(--agt-border)",
           backgroundColor: "var(--agt-surface)",
@@ -84,8 +88,7 @@ export default function TimelineSparkline(): JSX.Element {
           height={CHART_HEIGHT}
           viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
           aria-hidden="true"
-          className="block w-full"
-          style={{ maxWidth: `${CHART_WIDTH}px` }}
+          style={{ display: "block", width: "100%", maxWidth: `${CHART_WIDTH}px` }}
         >
           {bars.map((bar, i) => {
             const isLast = i === lastIndex;
@@ -129,12 +132,17 @@ export default function TimelineSparkline(): JSX.Element {
         </svg>
 
         <div
-          className="mt-[8px] flex items-center justify-between"
+          style={{
+            marginTop: "var(--space-1)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
           aria-hidden="true"
         >
           <span
-            className="font-[family-name:var(--font-mono)]"
             style={{
+              fontFamily: "var(--font-mono)",
               color: "var(--agt-muted)",
               fontSize: "var(--agt-type-small-size)",
               lineHeight: "var(--agt-type-small-line)",
@@ -143,8 +151,8 @@ export default function TimelineSparkline(): JSX.Element {
             run 1
           </span>
           <span
-            className="font-[family-name:var(--font-mono)]"
             style={{
+              fontFamily: "var(--font-mono)",
               color: "var(--agt-accent)",
               fontSize: "var(--agt-type-small-size)",
               lineHeight: "var(--agt-type-small-line)",
@@ -156,15 +164,23 @@ export default function TimelineSparkline(): JSX.Element {
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-[16px]" aria-hidden="true">
-        <span className="flex items-center gap-[6px]">
+      <div
+        style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}
+        aria-hidden="true"
+      >
+        <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
           <span
-            className="inline-block w-[8px] h-[8px] rounded-[2px]"
-            style={{ backgroundColor: "var(--agt-accent)" }}
+            style={{
+              display: "inline-block",
+              width: "8px",
+              height: "8px",
+              borderRadius: "var(--radius-sm)",
+              backgroundColor: "var(--agt-accent)",
+            }}
           />
           <span
-            className="font-[family-name:var(--font-ui)]"
             style={{
+              fontFamily: "var(--font-ui)",
               color: "var(--agt-warm-gray)",
               fontSize: "var(--agt-type-small-size)",
               lineHeight: "var(--agt-type-small-line)",
@@ -173,14 +189,20 @@ export default function TimelineSparkline(): JSX.Element {
             latest
           </span>
         </span>
-        <span className="flex items-center gap-[6px]">
+        <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
           <span
-            className="inline-block w-[8px] h-[8px] rounded-[2px]"
-            style={{ backgroundColor: "var(--agt-muted)", opacity: 0.55 }}
+            style={{
+              display: "inline-block",
+              width: "8px",
+              height: "8px",
+              borderRadius: "var(--radius-sm)",
+              backgroundColor: "var(--agt-muted)",
+              opacity: 0.55,
+            }}
           />
           <span
-            className="font-[family-name:var(--font-ui)]"
             style={{
+              fontFamily: "var(--font-ui)",
               color: "var(--agt-warm-gray)",
               fontSize: "var(--agt-type-small-size)",
               lineHeight: "var(--agt-type-small-line)",
