@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 interface RunDatum {
   durationMs: number;
@@ -20,7 +20,9 @@ const CHART_WIDTH = 280;
 const CHART_HEIGHT = 48;
 const BAR_GAP = 6;
 const BAR_COUNT = RUNS.length; // 7
-const BAR_WIDTH = Math.floor((CHART_WIDTH - BAR_GAP * (BAR_COUNT - 1)) / BAR_COUNT);
+const BAR_WIDTH = Math.floor(
+  (CHART_WIDTH - BAR_GAP * (BAR_COUNT - 1)) / BAR_COUNT
+);
 const MIN_BAR_HEIGHT = 4;
 
 interface BarDatum {
@@ -30,12 +32,12 @@ interface BarDatum {
 }
 
 function computeBars(runs: RunDatum[]): BarDatum[] {
-  const durations = runs.map((r) => r.durationMs);
+  const durations = runs.map((r: RunDatum) => r.durationMs);
   const maxDuration = Math.max(...durations);
   const minDuration = Math.min(...durations);
   const range = maxDuration - minDuration || 1;
 
-  return runs.map((run, i) => {
+  return runs.map((run: RunDatum, i: number) => {
     const normalised = (run.durationMs - minDuration) / range;
     const barHeight = Math.round(
       MIN_BAR_HEIGHT + normalised * (CHART_HEIGHT - MIN_BAR_HEIGHT)
@@ -46,15 +48,53 @@ function computeBars(runs: RunDatum[]): BarDatum[] {
   });
 }
 
-export function TimelineSparkline(): JSX.Element {
-  const prefersReduced = useReducedMotion();
+export function TimelineSparkline(): React.ReactElement {
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    const rects = svg.querySelectorAll<SVGRectElement>("rect[data-target-y]");
+    rects.forEach((rect: SVGRectElement) => {
+      const targetY = rect.getAttribute("data-target-y");
+      const targetH = rect.getAttribute("data-target-h");
+      if (targetY === null || targetH === null) return;
+
+      if (prefersReduced) {
+        rect.setAttribute("y", targetY);
+        rect.setAttribute("height", targetH);
+      } else {
+        rect.style.transition = "none";
+        rect.setAttribute("y", String(CHART_HEIGHT));
+        rect.setAttribute("height", "0");
+
+        requestAnimationFrame(() => {
+          const delayMs = Number(rect.getAttribute("data-delay") ?? "0");
+          rect.style.transition = `y 0.28s cubic-bezier(0.22,1,0.36,1) ${delayMs}ms, height 0.28s cubic-bezier(0.22,1,0.36,1) ${delayMs}ms`;
+          rect.setAttribute("y", targetY);
+          rect.setAttribute("height", targetH);
+        });
+      }
+    });
+  }, []);
+
   const bars = computeBars(RUNS);
   const lastIndex = RUNS.length - 1;
 
   return (
     <section
       aria-label="Timeline: recent run durations"
-      style={{ display: "flex", flexDirection: "column", gap: "var(--space-1)", width: "100%" }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "var(--space-1)",
+        width: "100%",
+      }}
     >
       {/* Verbatim copy label per spec */}
       <p
@@ -84,48 +124,44 @@ export function TimelineSparkline(): JSX.Element {
         aria-label="Bar chart showing last 7 pipeline run durations in milliseconds"
       >
         <svg
+          ref={svgRef}
           width={CHART_WIDTH}
           height={CHART_HEIGHT}
           viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
           aria-hidden="true"
-          style={{ display: "block", width: "100%", maxWidth: `${CHART_WIDTH}px` }}
+          style={{
+            display: "block",
+            width: "100%",
+            maxWidth: `${CHART_WIDTH}px`,
+          }}
         >
-          {bars.map((bar, i) => {
+          {bars.map((bar: BarDatum, i: number) => {
             const isLast = i === lastIndex;
 
             /*
              * Color rules — all via CSS custom properties, no hardcoded hex:
-             *   latest run  → var(--agt-accent)   [warm teal, full opacity, highlighted]
-             *   other runs  → var(--agt-muted)     [at reduced opacity]
+             *   latest run  -> var(--agt-accent)   [warm teal, full opacity, highlighted]
+             *   other runs  -> var(--agt-muted)     [at reduced opacity]
              */
-            const fillVar = isLast ? "var(--agt-accent)" : "var(--agt-muted)";
+            const fillVar = isLast
+              ? "var(--agt-accent)"
+              : "var(--agt-muted)";
             const opacity = isLast ? 1 : 0.55;
 
             return (
-              <motion.rect
+              <rect
                 key={i}
                 x={bar.x}
-                y={prefersReduced ? bar.y : CHART_HEIGHT}
+                y={bar.y}
                 width={BAR_WIDTH}
-                height={prefersReduced ? bar.height : 0}
+                height={bar.height}
                 rx={2}
                 ry={2}
                 fill={fillVar}
                 opacity={opacity}
-                animate={{
-                  y: bar.y,
-                  height: bar.height,
-                }}
-                transition={{
-                  duration: prefersReduced ? 0 : 0.28,
-                  delay: prefersReduced ? 0 : i * 0.04,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                aria-label={`Run ${
-                  i + 1
-                }: ${RUNS[i].durationMs}ms${
-                  isLast ? " (latest)" : ""
-                }`}
+                data-target-y={bar.y}
+                data-target-h={bar.height}
+                data-delay={i * 40}
               />
             );
           })}
@@ -165,15 +201,25 @@ export function TimelineSparkline(): JSX.Element {
 
       {/* Legend */}
       <div
-        style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "var(--space-2)",
+        }}
         aria-hidden="true"
       >
-        <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+        <span
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "var(--space-1)",
+          }}
+        >
           <span
             style={{
               display: "inline-block",
-              width: "8px",
-              height: "8px",
+              width: "var(--space-1)",
+              height: "var(--space-1)",
               borderRadius: "var(--radius-sm)",
               backgroundColor: "var(--agt-accent)",
             }}
@@ -189,12 +235,18 @@ export function TimelineSparkline(): JSX.Element {
             latest
           </span>
         </span>
-        <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+        <span
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "var(--space-1)",
+          }}
+        >
           <span
             style={{
               display: "inline-block",
-              width: "8px",
-              height: "8px",
+              width: "var(--space-1)",
+              height: "var(--space-1)",
               borderRadius: "var(--radius-sm)",
               backgroundColor: "var(--agt-muted)",
               opacity: 0.55,
